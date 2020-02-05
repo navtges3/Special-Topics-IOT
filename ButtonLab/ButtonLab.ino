@@ -2,6 +2,7 @@
 #define LED     5
 
 int buttonLastState = LOW;
+int LED_State = LOW;
 
 void setup() {
   // put your setup code here, to run once:
@@ -14,9 +15,13 @@ void loop() {
   int val = digitalRead(BUTTON);
 
   if(val == LOW && buttonLastState == HIGH) {
-    digitalWrite(LED, HIGH);
-    delay(1000);
-    digitalWrite(LED, LOW);
+    if(LED_State == LOW){
+      LED_State = HIGH;  
+    }
+    else {
+      LED_State = LOW;
+    }
+    digitalWrite(LED, LED_State);
   }
   buttonLastState = val;
 }
