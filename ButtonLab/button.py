@@ -8,6 +8,8 @@ GPIO.setup(18, GPIO.OUT)
 
 clickedflag = False
 
+ledState = GPIO.LOW
+
 while True:
   
     buttonstate = GPIO.input(21)
@@ -17,7 +19,9 @@ while True:
 
     if(not buttonstate and clickedflag):
         clickedflag = False
-        print('clicked')
-        GPIO.output(18, GPIO.HIGH)
-        time.sleep(1)
-        GPIO.output(18, GPIO.LOW)
+        if(ledState == GPIO.LOW):
+            ledState = GPIO.HIGH
+            GPIO.output(18, GPIO.HIGH)
+        else:
+            ledState = GPIO.LOW
+            GPIO.output(18, GPIO.LOW)
