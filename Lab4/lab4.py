@@ -5,12 +5,10 @@ import datetime
 
 broker_ip = "192.168.0.25"
 
-dbclient = InfluxDBClient('0.0.0.0', 8086, 'root', 'paiS3Gai', 'mydb')
+dbclient = InfluxDBClient('0.0.0.0', 8086, 'root', 'root', 'mydb')
 
 def on_message(client, userdata, message):
-    data = str(message.payload)
-    data = data[1:]
-    data = data.replace("'", "")
+    data = str(message.payload.decode("utf-8"))
     
     print(message.topic + " " + data)
     if(message.topic == "/Light"):
@@ -21,7 +19,7 @@ def on_message(client, userdata, message):
                 "measurement": '/light',
                 "time": receiveTime,
                 "fields": {
-                    "value": data
+                    "value": float(data)
                     }
                 }
             ]
@@ -41,21 +39,23 @@ client.subscribe("/Light")
 
 client.loop_start()
 
-query = 'select mean("value") from "/light" where "time" > now()-10s'
-
-result = dbclient.query(query)
-
-print(result)
+light_avg = 0.0
 
 try:
     while True:
-        light_avg = list(result.get_points(measurement='/light'))[0]['mean']
-        print(light_avg)
+        query = 'select mean("value") from "/light" where "time" > now()-10s'
 
-        if(light_avg > 200):
-            GPIO.output(18, GPIO.HIGH)
-        else:
-            GPIO.output(18, GPIO.LOW)
+        result = dbclient.query(query)
+
+        #print(result)
+        
+        light_list = list(result.get_points(measurement='/light'))
+        if(light_list != []):
+            light_avg = light_list[0]['mean']
+            if(light_avg > 200.0):
+                GPIO.output(18, GPIO.HIGH)
+            else:
+                GPIO.output(18, GPIO.LOW)
         
 except KeyboardInterrupt:
     pass
