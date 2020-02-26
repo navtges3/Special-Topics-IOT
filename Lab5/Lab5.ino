@@ -1,10 +1,10 @@
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
 
-//#define WLAN_SSID     "Little Boy Juice"
-//#define WLAN_PASS     "ThanksD00d"
-#define WLAN_SSID   "dan_2"
-#define WLAN_PASS   "supersecretpassword"
+#define WLAN_SSID     "Little Boy Juice"
+#define WLAN_PASS     "ThanksD00d"
+//#define WLAN_SSID   "dan_2"
+//#define WLAN_PASS   "supersecretpassword"
 
 #define BROKER_IP     "192.168.0.25"
 
