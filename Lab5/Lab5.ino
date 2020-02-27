@@ -57,6 +57,8 @@ void setup() {
   mqttclient.setServer(BROKER_IP, 1883);
   mqttclient.setCallback(callback);
   connect();
+
+  pinMode(LED, OUTPUT);
 }
 
 void loop() {
