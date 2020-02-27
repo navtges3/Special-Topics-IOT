@@ -22,21 +22,21 @@ class Test(Resource):
         light_list = list(result.get_points(measurement='/light'))
         if(light_list != []):
             light_avg = light_list[0]['mean']
-        return('Light_avg': str(light_avg))
+        return{'Light_avg': str(light_avg)}
             
     def post(self):
         value = request.get_data()
         value = json.loads(value)
-        if(value['device'] == 'pi'):
-            if(value['state'] == 'on'):
+        if(value['device'] == "pi"):
+            if(value['state'] == "on"):
                 client.publish('/piled', 'on')
-            if(value['state'] == 'off'):
+            if(value['state'] == "off"):
                 client.publish('/piled', 'off')
-        if(value['device'] == 'arduino'):
-            if(value['state'] == 'on'):
-                client.publish('/led', 'on')
-            if(value['state'] == 'off'):
-                client.publish('/led', 'off')
+        if(value['device'] == "arduino"):
+            if(value['state'] == "on"):
+                client.publish('/led', "on")
+            if(value['state'] == "off"):
+                client.publish('/led', "off")
 
 api.add_resource(Test, '/test')
 
